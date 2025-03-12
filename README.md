@@ -51,3 +51,6 @@ Para garantir a qualidade da integração, foram considerados:
     - Timeout (5s): Se a API de pagamento demorar mais de 5s para responder, o status será "Falha - Tempo excedido".
 
     - Erro geral: Se houver outro problema na requisição, o status será "Falha".
+
+## Teste realizado no postman
+![Teste POST](images/teste_postman.png)
