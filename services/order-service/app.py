@@ -16,10 +16,17 @@ def criar_pedido():
         "status": "Pendente"
     }
 
-    # Chamando o serviço de pagamento
+    # Chamando o serviço de pagamento com timeout de 5s e cabeçalho com versão
     try:
-        resposta = requests.post("http://localhost:8081/pagar")
+        resposta = requests.post(
+            "http://localhost:8081/pagar",
+            headers={"Content-Type": "application/json", "X-API-Version": "1.0"},
+            timeout=5
+        )
         pagamento_status = resposta.json().get("status", "Falha")
+    except requests.exceptions.Timeout:
+        print("Erro: Timeout na chamada ao serviço de pagamento")
+        pagamento_status = "Falha - Tempo excedido"
     except Exception as e:
         print("Erro ao chamar serviço de pagamento:", e)
         pagamento_status = "Falha"

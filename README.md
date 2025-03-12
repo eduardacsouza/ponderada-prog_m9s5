@@ -1,5 +1,5 @@
 # ponderada-prog_m9s5
-Este serviço simula um processo de integração entre um sistema de pedidos e um sistema de pagamentos utilizando API REST. O objetivo é garantir que, sempre que um pedido for criado, ele seja automaticamente enviado para processamento de pagamento, e o resultado seja armazenado no sistema.
+&emsp; Este serviço simula um processo de integração entre um sistema de pedidos e um sistema de pagamentos utilizando API REST. O objetivo é garantir que, sempre que um pedido for criado, ele seja automaticamente enviado para processamento de pagamento, e o resultado seja armazenado no sistema.
 
 
 ## a) Identificar e descrever a estrutura de integração, indicando camadas, módulos, componentes, serviços, hardware, software, processos 
@@ -7,20 +7,24 @@ Este serviço simula um processo de integração entre um sistema de pedidos e u
 ### Estrutura da Integração
 
 #### Camadas e Componentes
-1. **Camada de Apresentação**
+&emsp; O sistema segue uma arquitetura em camadas, garantindo uma separação clara de responsabilidades e facilitando a manutenção e escalabilidade.
+
+1. **Camada de Apresentação:** Interface que o usuário interage com os senviços.
     - Aplicação cliente
 
-2. Camada de Serviço
-    - Serviço de Pedidos
-    - Serviço de Pagamento
+2. **Camada de Serviço:** Contém os serviços de negócio, que processam as regras do sistema
+    - [Serviço de Pedidos](services\order-service\app.py)
+ → Gerencia a criação e status dos pedidos.
+    - [Serviço de Pagamento](services\payment-service\app.py)
+ → Processa pagamentos e retorna se foram aprovados ou recusados.
 
-3. Camada de Comunicação
-    - API REST
-    - Protocolo HTTP/HTTPS
+3. **Camada de Comunicação:** Responsável por definir como os serviços se comunicam
+    - Foi utilizado API REST para troca de informações entre serviços.
+    - Os serviços usam o protocolo HTTP/HTTPS para enviar e receber dados em formato JSON.
 
-4. Camada de Infraestrutura
-    - Banco de Dados
-    - Servidor em cloud
+4. **Camada de Infraestrutura:** Fornece os recursos básicos para a aplicação rodar
+    - Banco de Dados: Responsável por armazenar pedidos e pagamentos.
+    - Servidor em cloud: Responsável por hospedadar o serviço em algum servidor na nuvem e/ou local.
 
 #### Fluxo de Integração
 1. O usuário faz um pedido no sistema.
@@ -33,4 +37,17 @@ Este serviço simula um processo de integração entre um sistema de pedidos e u
 
 A troca de informações entre esses dois sistemas separados via API REST caracteriza a integração, unindo o serviço de pedidos com o de pagamento.
 
-## b) Mostrar como documentar e codificar o controle de qualidade de integração. O controle deve incluir tempos, protocolos, versões e tratamento de exceções. 
+## b) Mostrar como documentar e codificar o controle de qualidade de integração. O controle deve incluir tempos, protocolos, versões e tratamento de exceções.
+
+### Controle de Qualidade da Integração
+Para garantir a qualidade da integração, foram considerados:
+- Tempo de resposta: Timeout de 5s na chamada do serviço de pagamento.
+
+- Protocolo: Comunicação via HTTP/JSON.
+
+- Versões: Versão do serviço definida no cabeçalho HTTP.
+
+- Tratamento de exceções: 
+    - Timeout (5s): Se a API de pagamento demorar mais de 5s para responder, o status será "Falha - Tempo excedido".
+
+    - Erro geral: Se houver outro problema na requisição, o status será "Falha".
